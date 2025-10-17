@@ -337,6 +337,10 @@ class QiskitDeviceLegacy(QubitDevice, abc.ABC):
         If compile_backend is None, then the target is simply the
         backend.
         """
+
+        if self.run_args and self.run_args.get('backend_transpilation'):
+            return self._circuit
+
         return transpile(
             self._circuit,
             backend=self.compile_backend or self.backend,
