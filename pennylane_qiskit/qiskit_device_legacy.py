@@ -406,8 +406,14 @@ class QiskitDeviceLegacy(QubitDevice, abc.ABC):
             # software simulator: need to sample from probabilities
             return super().generate_samples()
 
+        # Needed for proper experiment result recovery from Scaleway's backend
+        # (Because circuit's naming convention is different between qiskit and pennylane-qiskit as of these versions)
+        key = circuit
+        if circuit.name.startswith("circ") and circuit.name[4:].isdigit():
+            key = int(circuit.name[4:])
+
         # hardware or hardware simulator
-        samples = self._current_job.result().get_memory(circuit)
+        samples = self._current_job.result().get_memory(key)
         # reverse qubit order to match PennyLane convention
         return np.vstack([np.array([int(i) for i in s[::-1]]) for s in samples])
 
