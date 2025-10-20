@@ -409,7 +409,7 @@ class QiskitDeviceLegacy(QubitDevice, abc.ABC):
         # Needed for proper experiment result recovery from Scaleway's backend
         # (Because circuit's naming convention is different between qiskit and pennylane-qiskit as of these versions)
         key = circuit
-        if circuit.name.startswith("circ") and circuit.name[4:].isdigit():
+        if circuit and circuit.name and circuit.name.startswith("circ") and circuit.name[4:].isdigit():
             key = int(circuit.name[4:])
 
         # hardware or hardware simulator
